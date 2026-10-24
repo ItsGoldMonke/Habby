@@ -1,0 +1,27 @@
+
+
+:root {
+    --text-color: #ffffff;
+    --text-h: #ffffff;
+    --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+    --paragraph: Inter, sans-serif;
+    --bg-color: #2B303A;
+}
+
+body {
+    background-color: var(--bg-color);
+}
+
+h1,
+h2 {
+    font-family: var(--heading), sans-serif;
+    font-weight: 500;
+    color: var(--text-h);
+}
+
+p {
+    font-family: var(--paragraph), sans-serif;
+    font-size: 1.2rem;
+
+
+}

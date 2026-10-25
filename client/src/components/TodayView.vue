@@ -6,10 +6,10 @@ import {onMounted, onUnmounted, ref, watch} from "vue";
 
 const STORAGE_KEY = "habits";
 let coolDownTimer: ReturnType<typeof setInterval>;
-
+type IntervalUnit = "minutes" | "hours" | "days";
 const newHabitName = ref("");
 const intervalValue = ref(1);
-const intervalUnit = ref("days");
+const intervalUnit = ref<IntervalUnit>("days");
 
 
 function loadHabits(): Habit[] {
@@ -84,7 +84,7 @@ function toggleHabit(id: string) {
 
 function handleSubmit() {
   const name = newHabitName.value;
-  if (!name || intervalValue < 1) return;
+  if (!name || intervalValue.value < 1) return;
 
   const multipliers = {
     minutes: 1,

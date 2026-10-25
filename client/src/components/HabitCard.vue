@@ -26,8 +26,8 @@ const emit = defineEmits<{
       <p>🔥Streak: {{habit.currentStreak}}</p>
     </div>
       <div class="habit-buttons">
-    <button @click="$emit('toggle', habit.id)" >{{ habit.completedToday ? "Completed ✅️" : "Mark as completed"}}</button>
-    <button @click="$emit('remove', habit.id)" >Remove Habit</button>
+    <button @click="$emit('toggle', habit.id)" style="background: #32614f">{{ habit.completedToday ? "Completed ✅️" : "Mark as completed"}}</button>
+    <button @click="$emit('remove', habit.id)" style="background: #D64933">Remove Habit</button>
       </div>
     </div>
   </article>
@@ -43,8 +43,8 @@ const emit = defineEmits<{
   gap: 1rem;
   padding: 1rem;
   border: 1px solid black;
-  border-radius: 5px;
-  background-color: #B14AED;
+  border-radius: 18px;
+  background-color: #7C7C7C;
   width: 100%;
   box-sizing: border-box;
 
@@ -82,7 +82,6 @@ const emit = defineEmits<{
 
 button {
   cursor: pointer;
-  background: #7C7C7C;
   padding: 0.5rem;
   border: none;
   border-radius: 8px;

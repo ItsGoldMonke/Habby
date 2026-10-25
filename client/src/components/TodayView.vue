@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import type { Habit } from "../types/habit.ts";
 import HabitCard from "./HabitCard.vue";
-import {ref, watch} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 
 
 const STORAGE_KEY = "habits";
+let coolDownTimer: ReturnType<typeof setInterval>;
+
+const newHabitName = ref("");
+const intervalValue = ref(1);
+const intervalUnit = ref("days");
+
 
 function loadHabits(): Habit[] {
   try {
@@ -17,23 +23,37 @@ function loadHabits(): Habit[] {
 
 const habits = ref<Habit[]>(loadHabits());
 
+onMounted(() => {
+  coolDownTimer = setInterval(() => {
+    const now = Date.now();
+
+    for (const habit of habits.value) {
+      if (
+          habit.completedToday &&
+          habit.lastCompleted !== null &&
+          now >= habit.lastCompleted + habit.intervalMinutes * 60 * 1000
+      ) {
+        habit.completedToday = false;
+      }
+    }
+  }, 1000)
+});
+
+onUnmounted(() => {
+  clearInterval(coolDownTimer);
+});
+
+
 watch(habits, (newHabits) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(newHabits));
 }, {deep: true});
 
-/* const habits = ref<Habit[]>([{completedToday: false ,currentStreak: 3,label: 'Morning and Evening', id: '1', name: 'Brush teeth' },
-  {completedToday: false ,currentStreak: 5,label: 'Every Day', id: '2', name: 'Code 5 minutes' },
-  {completedToday: true ,currentStreak: 0,label: '2 Hours, in blocks', id: '3', name: 'Study for test' },
-  {completedToday: false ,currentStreak: 3,label: '1 Hour', id: '4', name: 'Improve linux install' },
-  {completedToday: false ,currentStreak: 0,label: '5 Minutes', id: '5', name: 'Work on dots' },
-  {completedToday: true ,currentStreak: 2,label: '25 Minutes', id: '6', name: 'Read a book' }]);
-*/
-
-function addHabit(name: string) {
+function addHabit(name: string, intervalMinutes: number) {
   const habit: Habit = {
     id: crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     name,
-    label: 'Every Day',
+    label: `Every ${intervalValue.value} ${intervalUnit.value}`,
+    intervalMinutes, // needs to be implemented in the form later
     currentStreak: 0,
     completedToday: false,
     lastCompleted: null
@@ -49,22 +69,32 @@ function toggleHabit(id: string) {
   const habit = habits.value.find((habit) => habit.id === id); // finds the habit corresponding to the id in the list
   if (!habit) return // returns if no habit found matching given id
 
-  const now = Date.now();
-  const hours = 1;
-  const minutes = 1;
-  const cooldown = hours * minutes * 60 * 1000;
+  const now = Date.now(); // Current unix time
+  const cooldown = habit.intervalMinutes * 60 * 1000; // The cooldown in seconds
 
-  if (habit.completedToday) {
-    habit.completedToday = false;
+  if (habit.lastCompleted !== null && now < habit.lastCompleted + cooldown) {
     return;
   }
-  if (habit.lastCompleted == null || now - habit.lastCompleted > cooldown) {
-    habit.currentStreak++
-    habit.lastCompleted = now;
-
-  }
+  // Only gets here if cooldown has passed or if it has never started
 
   habit.completedToday = true;
+  habit.currentStreak++
+  habit.lastCompleted = now;
+}
+
+function handleSubmit() {
+  const name = newHabitName.value;
+  if (!name || intervalValue < 1) return;
+
+  const multipliers = {
+    minutes: 1,
+    hours: 60,
+    days: 1440,
+  };
+
+  const intervalMinutes = intervalValue.value * multipliers[intervalUnit.value];
+
+  addHabit(name, intervalMinutes);
 }
 
 
@@ -75,16 +105,35 @@ function toggleHabit(id: string) {
     <div class="top-bar">
 
       <h1>Today's Tasks:</h1>
-      <form @submit.prevent="addHabit(($event.target as HTMLFormElement).habitName.value.trim());
-($event.target as HTMLFormElement).reset();">
-        <input name="habitName" placeholder="Habit Name" required autocomplete="off" maxlength="20" />
-        <input class="submitinp" type="submit" value="+" />
+      <form @submit.prevent="handleSubmit">
+        <input
+            v-model="newHabitName"
+            name="habitName"
+            placeholder="Habit Name"
+            required
+            maxlength="20"
+            autocomplete="off"
+        />
+        <input
+            v-model.number="intervalValue"
+            type="number"
+            name="intervalMinutes"
+            min="1"
+            max="365"
+            required
+        />
+        <select v-model="intervalUnit">
+          <option value="minutes">Minutes</option>
+          <option value="hours">Hours</option>
+          <option value="days">Days</option>
+        </select>
+        <button type="submit">+</button>
       </form>
 
     </div>
 
     <div class="habit-grid">
-      <HabitCard @toggle="toggleHabit" @remove="removeHabit" v-for="habit in habits" :habit="habit"/>
+      <HabitCard @toggle="toggleHabit" @remove="removeHabit" v-for="habit in habits" :key="habit.id" :habit="habit"/>
     </div>
   </section>
 </template>
@@ -97,6 +146,19 @@ function toggleHabit(id: string) {
   align-items: center;
   flex-direction: row;
   justify-content: space-around;
+  gap: 1rem;
+}
+
+form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  form {
+    flex-direction: column;
+    align-items: end;
+  }
 }
 
 .top-bar input {
@@ -106,10 +168,29 @@ function toggleHabit(id: string) {
   outline: none;
   align-content: center;
   width: 11rem;
+  border-radius: 5px;
 }
 
-.top-bar .submitinp {
-  width: 2rem;
+.top-bar input[type='number'] {
+  width: 4rem;
+}
+
+.top-bar select {
+  font-size: 2rem;
+  background: #788697;
+  border: none;
+  outline: none;
+  align-content: center;
+  width: 11rem;
+  border-radius: 5px;
+}
+
+.top-bar [type='submit'] {
+  width: 2.5rem;
+  background: #526375;
+  font-size: 2rem;
+  outline: none;
+  border-radius: 5px;
 }
 
 h1 {
@@ -118,7 +199,9 @@ h1 {
 }
 button {
   font-size: 2rem;
-  text-align: center;
+  text-align: center;  border: none;
+  outline: none;
+
 }
 .habit-grid{
   display: flex;

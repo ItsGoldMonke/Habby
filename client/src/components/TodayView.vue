@@ -31,7 +31,7 @@ watch(habits, (newHabits) => {
 
 function addHabit(name: string) {
   const habit: Habit = {
-    id: crypto.randomUUID(),
+    id: crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     name,
     label: 'Every Day',
     currentStreak: 0,
@@ -73,12 +73,16 @@ function toggleHabit(id: string) {
 <template>
   <section>
     <div class="top-bar">
+
       <h1>Today's Tasks:</h1>
       <form @submit.prevent="addHabit(($event.target as HTMLFormElement).habitName.value.trim());
 ($event.target as HTMLFormElement).reset();">
         <input name="habitName" placeholder="Habit Name" required autocomplete="off" maxlength="20" />
+        <input class="submitinp" type="submit" value="+" />
       </form>
+
     </div>
+
     <div class="habit-grid">
       <HabitCard @toggle="toggleHabit" @remove="removeHabit" v-for="habit in habits" :habit="habit"/>
     </div>
@@ -86,10 +90,26 @@ function toggleHabit(id: string) {
 </template>
 
 <style scoped>
+
+
 .top-bar {
   display: flex;
+  align-items: center;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-around;
+}
+
+.top-bar input {
+  font-size: 2rem;
+  background: #788697;
+  border: none;
+  outline: none;
+  align-content: center;
+  width: 11rem;
+}
+
+.top-bar .submitinp {
+  width: 2rem;
 }
 
 h1 {

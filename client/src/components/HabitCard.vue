@@ -7,6 +7,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   toggle: [id: string]
+  remove: [id: string]
 }>()
 
 
@@ -24,7 +25,10 @@ const emit = defineEmits<{
       <h2>{{habit.label}}</h2>
       <p>🔥Streak: {{habit.currentStreak}}</p>
     </div>
+      <div class="habit-buttons">
     <button @click="$emit('toggle', habit.id)" >{{ habit.completedToday ? "Completed ✅️" : "Mark as completed"}}</button>
+    <button @click="$emit('remove', habit.id)" >Remove Habit</button>
+      </div>
     </div>
   </article>
 </template>
@@ -41,7 +45,9 @@ const emit = defineEmits<{
   border: 1px solid black;
   border-radius: 5px;
   background-color: #B14AED;
-  width: 25rem;
+  width: 100%;
+  box-sizing: border-box;
+
   }
 
 
@@ -66,15 +72,23 @@ const emit = defineEmits<{
 
 }
 
+
+.habit-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  }
+
+
 button {
   cursor: pointer;
   background: #7C7C7C;
   padding: 0.5rem;
   border: none;
   border-radius: 8px;
-  font-size: 2rem;
+  font-size: 1.2rem;
   color: #EEE5E9;
-  height: 90%;
+  height: 50%;
   width: 14rem;
   text-align: center;
 }

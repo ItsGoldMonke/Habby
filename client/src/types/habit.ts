@@ -4,4 +4,5 @@ export interface Habit {
     label: string;
     currentStreak: number;
     completedToday: boolean;
+    lastCompleted: number | null;
 }

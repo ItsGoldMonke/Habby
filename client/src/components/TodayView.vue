@@ -3,10 +3,10 @@ import type { Habit } from "../types/habit.ts";
 import HabitCard from "./HabitCard.vue";
 import {ref} from "vue";
 const habits = ref<Habit[]>([{completedToday: false ,currentStreak: 3,label: 'fahgfadgsh', id: '1', name: 'Brush teeth' },
-  {completedToday: false ,currentStreak: 5,label: 'fgfdgdfgahh', id: '2', name: 'Code 5 minutes' },
+  {completedToday: false ,currentStreak: 5,label: 'Every Day', id: '2', name: 'Code 5 minutes' },
   {completedToday: true ,currentStreak: 0,label: 'faadsdahh', id: '3', name: 'Study for test' },
   {completedToday: false ,currentStreak: 3,label: 'fahdsadash', id: '4', name: 'Improve linux install' },
-  {completedToday: false ,currentStreak: 0,label: 'fahh', id: '5', name: 'Work on dots' },
+  {completedToday: false ,currentStreak: 0,label: '5 Minutes', id: '5', name: 'Work on dots' },
   {completedToday: true ,currentStreak: 2,label: 'fahhfadf', id: '6', name: 'betterfs' }]);
 
 function toggleHabit(id: string) {

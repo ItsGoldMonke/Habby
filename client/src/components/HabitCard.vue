@@ -17,19 +17,23 @@ const emit = defineEmits<{
 
 <template>
   <article class="habit-card">
-    <div>
-      <h1>{{habit.name}}</h1>
+    <h1 class="habit-title">{{habit.name}}</h1>
+
+    <div class="habit-content">
+    <div class="habit-description">
       <h2>{{habit.label}}</h2>
-      <p>🔥 Current Streak: {{habit.currentStreak}}</p>
+      <p>🔥Streak: {{habit.currentStreak}}</p>
     </div>
     <button @click="$emit('toggle', habit.id)" >{{ habit.completedToday ? "Completed ✅️" : "Mark as completed"}}</button>
+    </div>
   </article>
 </template>
 
 <style scoped>
+
 .habit-card {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   margin: 0.2rem 0.6rem;
   align-items: center;
   gap: 1rem;
@@ -39,6 +43,29 @@ const emit = defineEmits<{
   background-color: #B14AED;
   width: 25rem;
   }
+
+
+.habit-title {
+  text-align: center;
+  margin: 0;
+  padding-bottom: 0.3rem;
+}
+.habit-description {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: center;
+  border-radius: 5px;
+
+}
+
+.habit-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+}
+
 button {
   cursor: pointer;
   background: #7C7C7C;
@@ -47,7 +74,8 @@ button {
   border-radius: 8px;
   font-size: 2rem;
   color: #EEE5E9;
-  height: 60%;
-  width: 50%;
+  height: 90%;
+  width: 14rem;
+  text-align: center;
 }
 </style>

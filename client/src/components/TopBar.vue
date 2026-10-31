@@ -64,6 +64,9 @@ function handleSubmit() {
   flex-direction: row;
   justify-content: space-around;
   gap: 1rem;
+  background: #526375;
+  border-radius: 0.4rem;
+  margin-bottom: 3rem;
 }
 
 form {

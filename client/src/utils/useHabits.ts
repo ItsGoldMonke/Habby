@@ -16,7 +16,7 @@ function loadHabits(): Habit[] {
 
 export const habits = ref<Habit[]>(loadHabits());
 
-watch(habits, (newHabits) => {
+watch(habits, (newHabits) => { // Watches for changes to the habits object and then saves those to localStorage.
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newHabits));
 }, {deep: true});
 
@@ -41,4 +41,21 @@ export function addHabit(
 
 export function removeHabit(id: string) {
     habits.value = habits.value.filter(habit => habit.id !== id); // removes habit corresponding to id
+}
+
+export function toggleHabit(id: string) {
+    const habit = habits.value.find((habit) => habit.id === id); // finds the habit corresponding to the id in the list
+    if (!habit) return // returns if no habit found matching given id
+
+    const now = Date.now(); // Current unix time
+    const cooldown = habit.intervalMinutes * 60 * 1000; // The cooldown in seconds
+
+    if (habit.lastCompleted !== null && now < habit.lastCompleted + cooldown) {
+        return;
+    }
+    // Only gets here if cooldown has passed or if it has never started
+
+    habit.completedToday = true;
+    habit.currentStreak++
+    habit.lastCompleted = now;
 }

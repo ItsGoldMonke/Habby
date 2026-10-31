@@ -7,3 +7,5 @@ export interface Habit {
     completedToday: boolean;
     lastCompleted: number | null;
 }
+
+export type IntervalUnit = "minutes" | "hours" | "days";

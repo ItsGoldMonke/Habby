@@ -11,7 +11,7 @@ const emit = defineEmits<{
 <template>
 <nav class="top-bar">
   <h1>Today's Tasks</h1>
-  <button @click="emit('open-modal')"><CirclePlus style="display: block" :strokeWidth="2" :size="64" color="white"/></button>
+  <button aria-label="Add new habit" @click="emit('open-modal')"><CirclePlus style="display: block" :strokeWidth="2" :size="64" color="white"/></button>
 </nav>
 </template>
 

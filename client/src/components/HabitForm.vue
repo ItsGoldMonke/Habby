@@ -15,7 +15,7 @@ const emit = defineEmits<{
 }>()
 
 
-const newHabitName = ref(props.habit?.name);
+const newHabitName = ref(props.habit?.name ?? "");
 const intervalValue = ref(props.habit?.intervalValue ?? 1);
 const intervalUnit = ref<IntervalUnit>(props.habit?.intervalUnit ?? "days");
 
@@ -80,7 +80,7 @@ onClickOutside(target, ()=>emit('close-modal'))
             <option value="hours">Hours</option>
             <option value="days">Days</option>
           </select>
-          <button type='submit'><Plus style="display: block; margin: 0 auto;"  /></button>
+          <button type='submit' aria-label="Submit Habit"><Plus style="display: block; margin: 0 auto;"  /></button>
         </div>
       </form>
     </div>

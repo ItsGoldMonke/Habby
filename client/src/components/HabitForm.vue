@@ -4,7 +4,7 @@ import {computed, ref} from "vue";
 import type {Habit, IntervalUnit} from "../types/habit.ts";
 import {addHabit, editHabit} from "../utils/useHabits.ts";
 import { onClickOutside } from "@vueuse/core";
-import {Plus} from "@lucide/vue";
+import {Plus, X} from "@lucide/vue";
 
 const props = defineProps<{
   habit: Habit | null
@@ -54,8 +54,11 @@ onClickOutside(target, ()=>emit('close-modal'))
   <div class="habitModal">
     <div class="habitForm" ref="target">
       <form @submit.prevent="handleSubmit">
-        <h2>{{formTitle}}</h2>
-        <input
+        <div class="formTitleBar">
+          <h2>{{formTitle}}</h2>
+          <button @click="emit('close-modal')" aria-label="Close modal"><X style="display: block; margin: 0 auto;"/></button>
+        </div>
+          <input
             v-model="newHabitName"
             type="text"
             name="newHabitName"
@@ -132,6 +135,18 @@ h2 {
   gap: 10px;
 }
 
+.formTitleBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.formTitleBar button {
+  width: 35px;
+  height: 35px;
+}
+
 .intervalControls input {
   width: 65px;
 }
@@ -141,17 +156,22 @@ h2 {
 }
 
 input, select {
-  border: 1px solid #c5cdd5;
+  border: 1.5px solid #c5cdd5;
   outline: none;
   border-radius: 6px;
   background-color: #abb2ba;
   padding: 10px;
   font-size: 15px;
   min-width: 0;
+  transition: background-color 0.2s;
 }
 
 input:focus, select:focus {
-  border-color: #526375;
+  border-color: #375e87;
+}
+
+input:hover, select:hover {
+  background-color: #3d4c5f;
 }
 
 button {
@@ -169,4 +189,5 @@ button {
 button:hover {
   background-color: #3d4c5f;
 }
+
 </style>

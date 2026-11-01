@@ -11,7 +11,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  "close-modal"
+  "close-modal": [];
 }>()
 
 
@@ -34,7 +34,7 @@ function handleSubmit() {
   };
   const intervalMinutes = intervalValue.value * multipliers[intervalUnit.value];
 
-  if (!newHabitName.value || intervalValue.value < 1) return;
+  if (!newHabitName.value || intervalValue.value < 1 || !name) return;
 
   if (habit !== null) {
     editHabit(habit, name, intervalMinutes, intervalValue.value, intervalUnit.value);

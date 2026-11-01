@@ -72,8 +72,16 @@ function handleRemove(id: string) {
     <div class="habit-grid">
       <HabitCard @toggle="toggleHabit" @remove="handleRemove" @edit="handleEdit" v-for="habit in habits" :key="habit.id" :habit="habit"/>
     </div>
-    <HabitForm v-if="showHabitForm" :habit="editingHabit" @close-modal="closeModal"/>
-    <RemoveModal v-if="showRemoveModal" :habit="editingHabit" @close-modal="closeModal"/>
+    <Teleport to="body">
+      <Transition name="modal">
+        <HabitForm v-if="showHabitForm" :habit="editingHabit" @close-modal="closeModal"/>
+      </Transition>
+    </Teleport>
+    <Teleport to="body">
+      <Transition name="modal">
+        <RemoveModal v-if="showRemoveModal" :habit="editingHabit" @close-modal="closeModal"/>
+      </Transition>
+    </Teleport>
   </section>
 </template>
 

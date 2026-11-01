@@ -3,7 +3,7 @@
 import {computed, ref} from "vue";
 import type {Habit, IntervalUnit} from "../types/habit.ts";
 import {addHabit, editHabit} from "../utils/useHabits.ts";
-import { onClickOutside } from "@vueuse/core";
+import {onClickOutside, onKeyStroke} from "@vueuse/core";
 import {Plus, CircleX} from "@lucide/vue";
 
 const props = defineProps<{
@@ -48,17 +48,19 @@ function handleSubmit() {
 }
 const target = ref(null)
 onClickOutside(target, ()=>emit('close-modal'))
+onKeyStroke("Escape", () => emit('close-modal'))
+
 </script>
 
 <template>
-  <div class="habitModal" @keydown.esc="emit('close-modal')" >
+  <div class="habitModal">
     <div class="habitForm" ref="target">
       <form @submit.prevent="handleSubmit">
         <div class="formTitleBar">
           <h2>{{formTitle}}</h2>
           <button @click="emit('close-modal')" aria-label="Close modal"><CircleX class="closeIcon" style="display: block; margin: 0 auto;" nonScalingStroke :strokeWidth="3" :size="28"/></button>
         </div>
-          <input
+        <input
             v-model="newHabitName"
             type="text"
             name="newHabitName"

@@ -3,7 +3,7 @@ import {CircleX, Trash} from "@lucide/vue";
 import {removeHabit} from "../utils/useHabits.ts";
 import type {Habit} from "../types/habit.ts";
 import {ref} from "vue";
-import {onClickOutside} from "@vueuse/core";
+import {onClickOutside, onKeyStroke } from "@vueuse/core";
 
 
 const props = defineProps<{
@@ -16,6 +16,7 @@ const emit = defineEmits<{
 
 const target = ref(null)
 onClickOutside(target, ()=>emit('close-modal'))
+onKeyStroke("Escape", () => emit('close-modal'))
 
 function handleSubmit() {
   if (!props.habit) return;
@@ -28,17 +29,17 @@ function handleSubmit() {
 </script>
 
 <template>
-  <div class="habitModal" @keydown.esc="emit('close-modal')">
+  <div class="habitModal">
     <div class="habitForm" ref="target">
-        <div class="formTitleBar">
-          <div class="formTitleText">
-            <h2>Are you sure?</h2>
-            <p>Are you sure you want to delete {{ habit?.name }}?</p>
-          </div>
-          <button @click="emit('close-modal')" aria-label="Close modal"><CircleX class="closeIcon" style="display: block; margin: 0 auto;" nonScalingStroke :strokeWidth="3" :size="28"/></button>
+      <div class="formTitleBar">
+        <div class="formTitleText">
+          <h2>Are you sure?</h2>
+          <p>Are you sure you want to delete {{ habit?.name }}?</p>
         </div>
-          <button @click="handleSubmit()" aria-label="Submit Habit"><Trash class="trashIcon" />  Delete Habit</button>
-        </div>
+        <button @click="emit('close-modal')" aria-label="Close modal"><CircleX class="closeIcon" style="display: block; margin: 0 auto;" nonScalingStroke :strokeWidth="3" :size="28"/></button>
+      </div>
+      <button @click="handleSubmit()" aria-label="Submit Habit"><Trash class="trashIcon" />  Delete Habit</button>
+    </div>
   </div>
 </template>
 

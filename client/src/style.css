@@ -25,3 +25,24 @@ p {
 
 
 }
+
+.modal-enter-active,
+.modal-leave-active {
+    transition: opacity 0.2s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+}
+
+.modal-enter-active .habitForm,
+.modal-leave-active .habitForm {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.modal-enter-from .habitForm,
+.modal-leave-to .habitForm {
+    transform: scale(0.95);
+    opacity: 0;
+}

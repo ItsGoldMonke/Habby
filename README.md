@@ -8,6 +8,10 @@ with a responsive UI that works nicely on all kinds of devices.
 
 How it looks:
 ![image showing the UI of Habby](images/img.png)
+# Features:
+- A responsive UI that works on pretty much all (modern) devices
+- Streaks: if you don't do a habit for longer than your repetition time, your streak will reset, otherwise it will
+- Modal, for warning when deleting a habit and when editing a habit.
 
 # How to use:
 
@@ -27,3 +31,6 @@ This project has the following dependencies:
 - **vue** as the main framework
 - **vueuse** for outsideclick for the modal
 - **lucide** for icons
+
+# Credits:
+- [This guide](https://medium.com/@romanvinnick/vue3-composition-api-creating-a-reusable-modal-component-with-outside-click-handling-43e830d289c1) for helping me with the modals

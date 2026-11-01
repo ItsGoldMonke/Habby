@@ -7,7 +7,7 @@ It allows you to create habits with inputs for name, interval and the type of in
 with a responsive UI that works nicely on all kinds of devices.
 
 How it looks:
-![img.png](images/img.png)
+![image showing the UI of Habby](images/img.png)
 
 # How to use:
 
@@ -21,3 +21,9 @@ Prerequisites:
 Then clone the repo to your device of choice, cd into the `client` folder and run `pnpm install`, and wait for it to install all dependencies. Then you can either run pnpm run dev to use it quickly, however to use it long term you should run `pnpm run build`.
 
 Then host the files in the `dist` subfolder on your provider of choice (or your local device).
+
+# Dependencies
+This project has the following dependencies:
+- **vue** as the main framework
+- **vueuse** for outsideclick for the modal
+- **lucide** for icons

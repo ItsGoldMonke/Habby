@@ -94,4 +94,10 @@ button {
   width: 14rem;
   text-align: center;
 }
+
+@media (width < 300px) {
+  button {
+    width: 100%;
+  }
+}
 </style>

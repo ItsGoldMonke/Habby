@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import HabitCard from "./HabitCard.vue";
 import {onMounted, onUnmounted, ref} from "vue";
-import {habits, removeHabit, toggleHabit, getHabitFromId} from "../utils/useHabits.ts";
+import {habits, toggleHabit, getHabitFromId} from "../utils/useHabits.ts";
 import HabitForm from "./HabitForm.vue";
 import type {Habit} from "../types/habit.ts";
+import RemoveModal from "./RemoveModal.vue";
 
 let coolDownTimer: ReturnType<typeof setInterval>;
 
 const props = defineProps<{
   showHabitForm: boolean;
+  showRemoveModal: boolean;
 }>();
 
 const emit = defineEmits<{
   (event: 'update:showHabitForm', value: boolean): void;
+  (event: 'update:showRemoveModal', value: boolean): void;
 }>();
 
 
@@ -50,11 +53,16 @@ const editingHabit = ref<Habit | null>(null);
 function closeModal() {
   editingHabit.value = null;
   emit('update:showHabitForm', false);
+  emit('update:showRemoveModal', false);
 }
 
 function handleEdit(id: string) {
   editingHabit.value = getHabitFromId(id);
   emit('update:showHabitForm', true);
+}
+function handleRemove(id: string) {
+  editingHabit.value = getHabitFromId(id);
+  emit('update:showRemoveModal', true);
 }
 
 </script>
@@ -62,9 +70,10 @@ function handleEdit(id: string) {
 <template>
   <section>
     <div class="habit-grid">
-      <HabitCard @toggle="toggleHabit" @remove="removeHabit" @edit="handleEdit" v-for="habit in habits" :key="habit.id" :habit="habit"/>
+      <HabitCard @toggle="toggleHabit" @remove="handleRemove" @edit="handleEdit" v-for="habit in habits" :key="habit.id" :habit="habit"/>
     </div>
     <HabitForm v-if="showHabitForm" :habit="editingHabit" @close-modal="closeModal"/>
+    <RemoveModal v-if="showRemoveModal" :habit="editingHabit" @close-modal="closeModal"/>
   </section>
 </template>
 

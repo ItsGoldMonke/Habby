@@ -51,7 +51,7 @@ onClickOutside(target, ()=>emit('close-modal'))
 </script>
 
 <template>
-  <div class="habitModal">
+  <div class="habitModal" @keydown.esc="emit('close-modal')" >
     <div class="habitForm" ref="target">
       <form @submit.prevent="handleSubmit">
         <div class="formTitleBar">

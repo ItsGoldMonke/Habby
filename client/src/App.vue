@@ -4,10 +4,11 @@ import TopBar from "./components/TopBar.vue";
 import {ref} from "vue";
 
 const showHabitForm = ref(false);
+const showRemoveModal = ref(false);
 </script>
 
 <template>
   <TopBar @open-modal="showHabitForm = true" />
-  <TodayView :show-habit-form="showHabitForm" @update:show-habit-form="showHabitForm = $event" />
+  <TodayView :show-habit-form="showHabitForm" :show-remove-modal="showRemoveModal" @update:show-habit-form="showHabitForm = $event" @update:show-remove-modal="showRemoveModal = $event" />
 
 </template>

@@ -1,9 +1,20 @@
 <script setup lang="ts">
 import HabitCard from "./HabitCard.vue";
-import {onMounted, onUnmounted} from "vue";
-import {habits, removeHabit, toggleHabit} from "../utils/useHabits.ts";
+import {onMounted, onUnmounted, ref} from "vue";
+import {habits, removeHabit, toggleHabit, getHabitFromId} from "../utils/useHabits.ts";
+import HabitForm from "./HabitForm.vue";
+import type {Habit} from "../types/habit.ts";
 
 let coolDownTimer: ReturnType<typeof setInterval>;
+
+const props = defineProps<{
+  showHabitForm: boolean;
+}>();
+
+const emit = defineEmits<{
+  (event: 'update:showHabitForm', value: boolean): void;
+}>();
+
 
 onMounted(() => {
   coolDownTimer = setInterval(() => {
@@ -12,14 +23,20 @@ onMounted(() => {
     for (const habit of habits.value) {
       if (
           habit.completedToday &&
-          habit.lastCompleted !== null &&
-          now >= habit.lastCompleted + habit.intervalMinutes * 60 * 1000
+          habit.lastCompleted !== null && // Has been completed before
+          now >= habit.lastCompleted + habit.intervalMinutes * 60 * 1000 // The time now is over or equal to the time when last completed + the cooldown
       ) {
-        habit.completedToday = false;
+        habit.completedToday = false; // Makes it not be completed
+      }
+      else if (
+          habit.lastCompleted !== null &&
+          now >= habit.lastCompleted + (habit.intervalMinutes * 60 * 1000) * 2 // If cooldown has passed twice
+      ) {
+        habit.currentStreak = 0; // Reset streak to 0
       }
     }
   }, 1000)
-}); // TODO: Implement streak resetting & improve daily streaks
+}); // TODO: improve daily streaks
 
 onUnmounted(() => {
   clearInterval(coolDownTimer);
@@ -27,13 +44,32 @@ onUnmounted(() => {
 
 
 
+const editingHabit = ref<Habit | null>(null);
+
+function openModal() {
+  editingHabit.value = null;
+  emit('update:showHabitForm', true);
+}
+
+function closeModal() {
+  editingHabit.value = null;
+  emit('update:showHabitForm', false);
+  console.log("closed")
+}
+
+function handleEdit(id: string) {
+  editingHabit.value = getHabitFromId(id);
+  emit('update:showHabitForm', true);
+}
+
 </script>
 
 <template>
   <section>
     <div class="habit-grid">
-      <HabitCard @toggle="toggleHabit" @remove="removeHabit" v-for="habit in habits" :key="habit.id" :habit="habit"/>
+      <HabitCard @toggle="toggleHabit" @remove="removeHabit" @edit="handleEdit" v-for="habit in habits" :key="habit.id" :habit="habit"/>
     </div>
+    <HabitForm v-if="showHabitForm" :habit="editingHabit" @close-modal="closeModal"/>
   </section>
 </template>
 

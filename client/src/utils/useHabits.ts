@@ -1,7 +1,6 @@
 import {ref, watch} from "vue";
 import type {Habit, IntervalUnit} from "../types/habit.ts";
 
-
 const STORAGE_KEY = "habits";
 
 
@@ -29,7 +28,9 @@ export function addHabit(
         id: crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
         name,
         label: `Every ${intervalValue} ${intervalUnit}`,
-        intervalMinutes, // needs to be implemented in the form later
+        intervalMinutes,
+        intervalUnit,
+        intervalValue,
         currentStreak: 0,
         completedToday: false,
         lastCompleted: null
@@ -58,4 +59,26 @@ export function toggleHabit(id: string) {
     habit.completedToday = true;
     habit.currentStreak++
     habit.lastCompleted = now;
+}
+
+export function getHabitFromId(id: string) {
+    console.log(id);
+    const habit = habits.value.find((habit) => habit.id === id);
+    if (!habit) return null
+    console.log(habit);
+    return habit;
+}
+
+export function editHabit(
+    habit: Habit,
+    newName: string,
+    intervalMinutes: number,
+    intervalValue: number,
+    intervalUnit: IntervalUnit
+) {
+    habit.name = newName;
+    habit.intervalMinutes = intervalMinutes;
+    habit.label = `Every ${intervalValue} ${intervalUnit}`;
+    habit.intervalValue = intervalValue;
+    habit.intervalUnit = intervalUnit;
 }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Habit } from "../types/habit.ts";
+import {Edit3Icon} from "@lucide/vue";
 
 const props = defineProps<{
   habit: Habit
@@ -8,6 +9,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   toggle: [id: string]
   remove: [id: string]
+  edit: [id: string]
 }>()
 
 
@@ -28,6 +30,7 @@ const emit = defineEmits<{
       <div class="habit-buttons">
     <button @click="$emit('toggle', habit.id)" style="background: #32614f">{{ habit.completedToday ? "Completed ✅️" : "Mark as completed"}}</button>
     <button @click="$emit('remove', habit.id)" style="background: #D64933">Remove Habit</button>
+    <button @click="$emit('edit', habit.id)" style="background: #ba7000"><Edit3Icon color="black" :stroke-width="2.5"/></button>
       </div>
     </div>
   </article>

@@ -26,7 +26,7 @@ const formTitle = computed(() =>
 
 function handleSubmit() {
   const habit = props.habit;
-  const name = newHabitName.value;
+  const name = newHabitName.value?.trim() ?? "";
   const multipliers = {
     minutes: 1,
     hours: 60,
@@ -34,7 +34,7 @@ function handleSubmit() {
   };
   const intervalMinutes = intervalValue.value * multipliers[intervalUnit.value];
 
-  if (!newHabitName.value || intervalValue.value < 1 || !name) return;
+  if (intervalValue.value < 1 || !name) return;
 
   if (habit !== null) {
     editHabit(habit, name, intervalMinutes, intervalValue.value, intervalUnit.value);

@@ -3,7 +3,7 @@ import {CircleX, Trash} from "@lucide/vue";
 import {removeHabit} from "../utils/useHabits.ts";
 import type {Habit} from "../types/habit.ts";
 import {ref} from "vue";
-import {onClickOutside} from "@vueuse/core";
+import {onClickOutside, onKeyStroke } from "@vueuse/core";
 
 
 const props = defineProps<{
@@ -16,6 +16,7 @@ const emit = defineEmits<{
 
 const target = ref(null)
 onClickOutside(target, ()=>emit('close-modal'))
+onKeyStroke("Escape", () => emit('close-modal'))
 
 function handleSubmit() {
   if (!props.habit) return;
@@ -28,7 +29,7 @@ function handleSubmit() {
 </script>
 
 <template>
-  <div class="habitModal" @keydown.esc="emit('close-modal')">
+  <div class="habitModal">
     <div class="habitForm" ref="target">
         <div class="formTitleBar">
           <div class="formTitleText">

@@ -3,7 +3,7 @@
 import {computed, ref} from "vue";
 import type {Habit, IntervalUnit} from "../types/habit.ts";
 import {addHabit, editHabit} from "../utils/useHabits.ts";
-import { onClickOutside } from "@vueuse/core";
+import {onClickOutside, onKeyStroke} from "@vueuse/core";
 import {Plus, CircleX} from "@lucide/vue";
 
 const props = defineProps<{
@@ -48,6 +48,8 @@ function handleSubmit() {
 }
 const target = ref(null)
 onClickOutside(target, ()=>emit('close-modal'))
+onKeyStroke("Escape", () => emit('close-modal'))
+
 </script>
 
 <template>

@@ -46,15 +46,10 @@ onUnmounted(() => {
 
 const editingHabit = ref<Habit | null>(null);
 
-/*function openModal() {
-  editingHabit.value = null;
-  emit('update:showHabitForm', true);
-} */
 
 function closeModal() {
   editingHabit.value = null;
   emit('update:showHabitForm', false);
-  console.log("closed")
 }
 
 function handleEdit(id: string) {

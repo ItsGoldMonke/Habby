@@ -62,10 +62,8 @@ export function toggleHabit(id: string) {
 }
 
 export function getHabitFromId(id: string) {
-    console.log(id);
     const habit = habits.value.find((habit) => habit.id === id);
     if (!habit) return null
-    console.log(habit);
     return habit;
 }
 

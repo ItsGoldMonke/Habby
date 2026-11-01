@@ -4,7 +4,7 @@ import {computed, ref} from "vue";
 import type {Habit, IntervalUnit} from "../types/habit.ts";
 import {addHabit, editHabit} from "../utils/useHabits.ts";
 import { onClickOutside } from "@vueuse/core";
-import {Plus, X} from "@lucide/vue";
+import {Plus, CircleX} from "@lucide/vue";
 
 const props = defineProps<{
   habit: Habit | null
@@ -56,7 +56,7 @@ onClickOutside(target, ()=>emit('close-modal'))
       <form @submit.prevent="handleSubmit">
         <div class="formTitleBar">
           <h2>{{formTitle}}</h2>
-          <button @click="emit('close-modal')" aria-label="Close modal"><X style="display: block; margin: 0 auto;"/></button>
+          <button @click="emit('close-modal')" aria-label="Close modal"><CircleX class="closeIcon" style="display: block; margin: 0 auto;" nonScalingStroke :strokeWidth="3" :size="28"/></button>
         </div>
           <input
             v-model="newHabitName"
@@ -143,8 +143,22 @@ h2 {
 }
 
 .formTitleBar button {
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+}
+.formTitleBar button:hover {
+  color: white;
+  background-color: transparent;
+}
+
+.formTitleBar button:hover .closeIcon {
+  color: #1e1c1c;
+  transition: color 0.2s;
+}
+
+.closeIcon {
+  color: #526375
 }
 
 .intervalControls input {

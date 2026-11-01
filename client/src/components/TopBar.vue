@@ -9,33 +9,53 @@ const emit = defineEmits<{
 </script>
 
 <template>
-<nav class="top-bar">
-  <h1>Today's Tasks</h1>
-  <button aria-label="Add new habit" @click="emit('open-modal')"><CirclePlus style="display: block" :strokeWidth="2" :size="64" color="white"/></button>
-</nav>
+  <nav class="top-bar">
+    <div></div>
+
+    <div class="tasks">
+      <h1>Today's Tasks</h1>
+    </div>
+
+    <button aria-label="Add new habit" @click="emit('open-modal')">
+      <CirclePlus :strokeWidth="2" :size="48" color="white"/>
+    </button>
+  </nav>
 </template>
 
 <style scoped>
-.top-bar {
+
+.tasks {
   display: flex;
   align-items: center;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   gap: 1rem;
   background: #526375;
   border-radius: 0.4rem;
+  margin: 1.5rem;
+  align-self: center;
+}
+
+.top-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  background: #526375;
+  border-radius: 0.4rem;
   margin-bottom: 3rem;
+  padding: 0.5rem 5rem;
 }
 
 h1 {
   font-size: 3rem;
   text-align: center;
+  margin: 0;
 }
 button {
-  font-size: 4rem;
-  text-align: center;  border: none;
+  justify-self: end;
+  border: none;
   outline: none;
-  background: #526375;
+  background: transparent;
   cursor: pointer;
 }
 </style>

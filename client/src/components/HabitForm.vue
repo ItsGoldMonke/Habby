@@ -108,6 +108,12 @@ onClickOutside(target, ()=>emit('close-modal'))
   text-align: center;
 }
 
+@media (width < 500px) {
+  .habitForm {
+    width: 75%;
+  }
+}
+
 form {
   display: flex;
   flex-direction: column;
